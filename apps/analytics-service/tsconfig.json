@@ -1,0 +1,7 @@
+{
+  "extends": "@stillalive/tsconfig/nestjs.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src", "test"]
+}
