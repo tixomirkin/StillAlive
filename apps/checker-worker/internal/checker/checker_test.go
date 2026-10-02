@@ -22,8 +22,8 @@ func TestHTTPCheck(t *testing.T) {
 	}
 
 	result := performHTTPCheck(event)
-	if result.Status != "up" {
-		t.Errorf("expected status up, got %s", result.Status)
+	if result.Status != "UP" {
+		t.Errorf("expected status UP, got %s", result.Status)
 	}
 }
 
@@ -42,14 +42,14 @@ func TestHTTPCheck_Keyword(t *testing.T) {
 	}
 
 	result := performHTTPCheck(event)
-	if result.Status != "up" {
-		t.Errorf("expected status up, got %s", result.Status)
+	if result.Status != "UP" {
+		t.Errorf("expected status UP, got %s", result.Status)
 	}
 
 	event.Keyword = "notfound"
 	result = performHTTPCheck(event)
-	if result.Status != "down" {
-		t.Errorf("expected status down, got %s", result.Status)
+	if result.Status != "DOWN" {
+		t.Errorf("expected status DOWN, got %s", result.Status)
 	}
 }
 
@@ -65,7 +65,7 @@ func TestTCPCheck(t *testing.T) {
 	}
 
 	result := performTCPCheck(event)
-	if result.Status != "up" {
-		t.Errorf("expected status up, got %s", result.Status)
+	if result.Status != "UP" {
+		t.Errorf("expected status UP, got %s", result.Status)
 	}
 }

@@ -30,7 +30,7 @@ func performHTTPCheck(event CheckScheduledEvent) CheckCompletedEvent {
 	if err != nil {
 		return CheckCompletedEvent{
 			MonitorID:    event.MonitorID,
-			Status:       "down",
+			Status:       "DOWN",
 			Error:        err.Error(),
 			ResponseTime: float64(time.Since(start).Milliseconds()),
 			CheckedAt:    time.Now(),
@@ -47,7 +47,7 @@ func performHTTPCheck(event CheckScheduledEvent) CheckCompletedEvent {
 	if err != nil {
 		return CheckCompletedEvent{
 			MonitorID:    event.MonitorID,
-			Status:       "down",
+			Status:       "DOWN",
 			Error:        err.Error(),
 			ResponseTime: responseTime,
 			CheckedAt:    time.Now(),
@@ -55,17 +55,17 @@ func performHTTPCheck(event CheckScheduledEvent) CheckCompletedEvent {
 	}
 	defer resp.Body.Close()
 
-	status := "up"
+	status := "UP"
 	if event.ExpectedStatusCode != 0 && resp.StatusCode != event.ExpectedStatusCode {
-		status = "down"
+		status = "DOWN"
 	} else if event.ExpectedStatusCode == 0 && (resp.StatusCode < 200 || resp.StatusCode >= 300) {
-		status = "down"
+		status = "DOWN"
 	}
 
-	if status == "up" && event.Keyword != "" {
+	if status == "UP" && event.Keyword != "" {
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		if !strings.Contains(string(bodyBytes), event.Keyword) {
-			status = "down"
+			status = "DOWN"
 		}
 	}
 
