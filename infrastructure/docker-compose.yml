@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: stillalive-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: stillalive
+      POSTGRES_PASSWORD: stillalive_secret
+      POSTGRES_DB: stillalive
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stillalive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stillalive-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: stillalive-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stillalive-network
+
+  nats:
+    image: nats:2.10-alpine
+    container_name: stillalive-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: --js --sd /data --http_port 8222 --name stillalive-nats
+    volumes:
+      - nats_data:/data
+    networks:
+      - stillalive-network
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: stillalive-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - stillalive-network
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: stillalive-grafana
+    ports:
+      - "3100:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - stillalive-network
+
+  nats-box:
+    image: natsio/nats-box:0.14
+    container_name: stillalive-nats-box
+    command: sleep infinity
+    networks:
+      - stillalive-network
+    profiles:
+      - debug
+
+volumes:
+  postgres_data:
+  redis_data:
+  nats_data:
+  grafana_data:
+
+networks:
+  stillalive-network:
+    driver: bridge
