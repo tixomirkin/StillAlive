@@ -1,0 +1,35 @@
+{
+  "title": "StillAlive Overview",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Total HTTP Requests",
+      "targets": [{"expr": "sum(http_requests_total)"}],
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 8}
+    },
+    {
+      "type": "histogram",
+      "title": "Request Duration",
+      "targets": [{"expr": "rate(http_request_duration_seconds_bucket[5m])"}],
+      "gridPos": {"x": 8, "y": 0, "w": 8, "h": 8}
+    },
+    {
+      "type": "gauge",
+      "title": "Active Monitors",
+      "targets": [{"expr": "sum(active_monitors)"}],
+      "gridPos": {"x": 16, "y": 0, "w": 8, "h": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "Checks per minute",
+      "targets": [{"expr": "rate(checks_total[1m]) * 60"}],
+      "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "Error rate",
+      "targets": [{"expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])) * 100"}],
+      "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}
+    }
+  ]
+}
