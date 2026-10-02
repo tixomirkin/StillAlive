@@ -70,31 +70,78 @@ graph TD
 - Go >= 1.22
 - Docker & Docker Compose
 
-### Installation steps:
-1. Clone repo
-2. Install dependencies: `pnpm install`
-3. Copy `.env.example` to `.env`
-4. Start infrastructure: `pnpm docker:up`
-5. Run database migrations: `pnpm db:migrate`
-6. Seed database: `pnpm db:seed`
-7. Start all services: `pnpm dev`
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/tixomirkin/StillAlive.git
+cd StillAlive
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Configure environment
+cp .env.example .env
+
+# 4. Start infrastructure (PostgreSQL, Redis, NATS, Prometheus, Grafana)
+pnpm docker:up
+
+# 5. Run database migrations
+pnpm db:migrate
+
+# 6. Seed database with demo data
+pnpm db:seed
+
+# 7. Start all services in development mode
+pnpm dev
+```
+
+### Individual Services
+
+```bash
+pnpm --filter @stillalive/api-gateway dev        # API Gateway    → :3000
+pnpm --filter @stillalive/monitor-service dev     # Monitor Svc    → :3001
+pnpm --filter @stillalive/analytics-service dev   # Analytics Svc  → :3002
+pnpm --filter @stillalive/notification-service dev # Notification   → :3003
+pnpm --filter @stillalive/web dev                 # Web Dashboard  → :3010
+cd apps/checker-worker && make run                # Go Worker
+```
 
 ## 🧪 Testing
-- `pnpm test` - Run all unit tests
-- `pnpm test:cov` - Run tests with coverage
-- `go test ./...` - Run Go tests
-- E2E tests with Playwright
+
+```bash
+pnpm test              # Run all unit tests
+pnpm test:cov          # Run tests with coverage
+pnpm test:e2e          # Run E2E tests
+
+# Go worker tests
+cd apps/checker-worker
+make test              # Run with race detector
+make test-coverage     # Generate coverage report
+```
 
 ## 📁 Project Structure
+
 ```
 StillAlive/
 ├── apps/
-│   ├── api/            # NestJS API Gateway
-│   ├── web/            # Next.js Frontend
-│   ├── checker-worker/ # Go Checking Microservice
-│   └── notifier/       # Notifications Microservice
-├── packages/           # Shared libraries (types, ui)
-└── docker/             # Infrastructure config
+│   ├── api-gateway/          # NestJS — Auth, routing, rate limiting
+│   ├── monitor-service/      # NestJS — CRUD monitors, scheduling
+│   ├── analytics-service/    # NestJS — Uptime stats, aggregation
+│   ├── notification-service/ # NestJS — Email, Slack, webhooks
+│   ├── checker-worker/       # Go — HTTP/TCP/Ping checks
+│   └── web/                  # Next.js — Dashboard UI
+├── packages/
+│   ├── shared-types/         # Shared TypeScript interfaces & DTOs
+│   ├── database/             # Prisma schema & migrations
+│   ├── eslint-config/        # Shared ESLint configuration
+│   └── tsconfig/             # Shared TypeScript configs
+├── infrastructure/
+│   ├── docker-compose.yml    # Local dev orchestration
+│   ├── docker/               # Multi-stage Dockerfiles
+│   ├── prometheus/           # Prometheus scrape config
+│   └── grafana/              # Dashboards & provisioning
+└── .github/workflows/        # CI/CD pipeline
 ```
 
 ## 🔌 API Documentation
