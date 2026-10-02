@@ -2,6 +2,7 @@ package checker
 
 import (
 	"encoding/json"
+	"strings"
 	"sync"
 
 	"github.com/nats-io/nats.go"
@@ -51,11 +52,13 @@ func (c *Checker) handleCheck(msg *nats.Msg) {
 		}()
 
 		var result CheckCompletedEvent
-		switch event.Type {
-		case "http", "keyword":
+		switch strings.ToUpper(event.Type) {
+		case "HTTP", "KEYWORD":
 			result = performHTTPCheck(event)
-		case "tcp":
+		case "TCP":
 			result = performTCPCheck(event)
+		case "PING":
+			result = performPingCheck(event)
 		default:
 			log.Warn().Str("type", event.Type).Msg("Unknown check type")
 			return

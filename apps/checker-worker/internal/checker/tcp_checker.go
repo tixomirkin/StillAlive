@@ -18,7 +18,7 @@ func performTCPCheck(event CheckScheduledEvent) CheckCompletedEvent {
 	if err != nil {
 		return CheckCompletedEvent{
 			MonitorID:    event.MonitorID,
-			Status:       "down",
+			Status:       "DOWN",
 			Error:        err.Error(),
 			ResponseTime: responseTime,
 			CheckedAt:    time.Now(),
@@ -28,7 +28,7 @@ func performTCPCheck(event CheckScheduledEvent) CheckCompletedEvent {
 
 	return CheckCompletedEvent{
 		MonitorID:    event.MonitorID,
-		Status:       "up",
+		Status:       "UP",
 		ResponseTime: responseTime,
 		CheckedAt:    time.Now(),
 	}
