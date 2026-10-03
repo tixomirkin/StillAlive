@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar {
+  display: flex;
+  height: 40px;
+  gap: 2px;
+  width: 100%;
+}
+
+.segment {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.segment:hover {
+  opacity: 0.8;
+}
+
+.segment.up { background-color: var(--primary); }
+.segment.warn { background-color: var(--warning); }
+.segment.down { background-color: var(--danger); }
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
