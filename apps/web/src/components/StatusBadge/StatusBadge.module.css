@@ -1,0 +1,29 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.up .dot { background-color: var(--primary); }
+.up { color: var(--primary); border-color: rgba(34, 197, 94, 0.3); }
+
+.down .dot { background-color: var(--danger); }
+.down { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
+
+.pending .dot { background-color: var(--warning); }
+.pending { color: var(--warning); border-color: rgba(245, 158, 11, 0.3); }
+
+.paused .dot { background-color: var(--text-secondary); }
+.paused { color: var(--text-secondary); }

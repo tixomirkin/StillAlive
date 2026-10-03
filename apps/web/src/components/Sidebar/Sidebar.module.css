@@ -1,0 +1,51 @@
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.logo {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.nav {
+  flex: 1;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  padding: 12px 20px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.link:hover {
+  background-color: var(--bg-card);
+  color: var(--text);
+}
+
+.active {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: var(--primary);
+  border-right: 3px solid var(--primary);
+}
+
+.footer {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.collapseBtn {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.collapseBtn:hover {
+  color: var(--text);
+}
